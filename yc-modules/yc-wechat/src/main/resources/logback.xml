@@ -64,9 +64,6 @@
     <!-- Spring日志级别控制  -->
     <logger name="org.springframework" level="warn"/>
 
-    <!-- 指定打印SQL -->
-    <logger name="com.yc.admin.mapper" level="debug"/>
-
     <root level="info">
         <appender-ref ref="console"/>
     </root>

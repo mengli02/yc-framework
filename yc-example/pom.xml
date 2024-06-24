@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>yc-framework</artifactId>
+        <groupId>com.yc.framework</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.yc.framework</groupId>
+    <artifactId>yc-example</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>yc-example-page</module>
+        <module>yc-example-easypoi</module>
+        <module>yc-example-poi</module>
+        <module>yc-example-poitl</module>
+        <module>yc-example-cors</module>
+        <module>yc-example-knife4j</module>
+        <module>yc-example-log</module>
+        <module>yc-example-redis</module>
+        <module>yc-example-security</module>
+        <module>yc-example-email</module>
+        <module>yc-example-crawler</module>
+        <module>yc-example-thread</module>
+        <module>yc-example-multidatabase</module>
+        <module>yc-example-wordtopdf</module>
+        <module>yc-example-xxljob</module>
+        <module>yc-example-elasticjob</module>
+        <module>yc-example-druid</module>
+        <module>yc-example-eureka</module>
+        <module>yc-example-nacos</module>
+        <module>yc-example-mp</module>
+        <module>yc-example-es</module>
+        <module>yc-example-txlcn</module>
+        <module>yc-example-cxf</module>
+        <module>yc-example-dubbo</module>
+        <module>yc-example-shedlock</module>
+        <module>yc-example-test</module>
+        <module>yc-example-netty</module>
+        <module>yc-example-liteflow</module>
+        <module>yc-example-dynamic-tp</module>
+        <module>yc-example-gobrs-async</module>
+        <module>yc-example-image-combiner</module>
+        <module>yc-example-easypdf</module>
+        <module>yc-example-easyes</module>
+        <module>yc-example-kafka</module>
+        <module>yc-example-flink</module>
+        <module>yc-example-influxdb</module>
+        <module>yc-example-container</module>
+        <module>yc-example-clickhouse</module>
+        <module>yc-example-rocketmq</module>
+        <module>yc-example-activemq</module>
+        <module>yc-example-quartz</module>
+        <module>yc-example-postgresql</module>
+        <module>yc-example-neo4j</module>
+        <module>yc-example-websocket</module>
+    </modules>
+
+
+</project>

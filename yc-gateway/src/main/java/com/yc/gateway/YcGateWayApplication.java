@@ -4,14 +4,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @description:
  * @author: youcong
- * @time: 2021/8/23 21:58
  */
-@SpringCloudApplication
+@EnableDiscoveryClient
+@EnableCircuitBreaker
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class YcGateWayApplication {
     public static void main(String[] args) {
         SpringApplication.run(YcGateWayApplication.class, args);

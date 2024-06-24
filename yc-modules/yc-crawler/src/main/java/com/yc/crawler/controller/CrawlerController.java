@@ -6,16 +6,15 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
+import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.yc.api.CnBlogsApi;
 import com.yc.common.core.base.dto.crawler.PostCrawlerReqDTO;
 import com.yc.common.core.base.dto.crawler.UserCrawlerReqDTO;
-import com.yc.common.core.base.enums.ResultCode;
-import com.yc.common.core.base.result.ResultBody;
+import com.yc.common.core.base.enums.RespCode;
+import com.yc.common.core.base.result.RespBody;
 import com.yc.common.core.base.utils.JbcryptUtil;
 import com.yc.common.core.base.utils.thread.ThreadPoolUtil;
-import com.yc.crawler.mapper.CrawlerMapper;
 import com.yc.crawler.mapper.PostCrawlerMapper;
-import com.yc.crawler.process.ZqDataCrawler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +23,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -34,7 +35,6 @@ import java.util.concurrent.ExecutorService;
 /**
  * @description:
  * @author: youcong
- * @time: 2021/10/18 20:43
  */
 @RestController
 @RequestMapping("/dataCrawler")
@@ -45,40 +45,17 @@ public class CrawlerController {
     private CnBlogsApi cnBlogsApi;
 
     @Autowired
-    private CrawlerMapper crawlerMapper;
-
-    @Autowired
     private PostCrawlerMapper postCrawlerMapper;
-
-    /**
-     * 真气网-城市小时级数据抓取
-     */
-    @PostMapping("/zq_city_hour")
-    @ApiOperation("真气网-城市小时级数据抓取")
-    public ResultBody zq_city_hour() {
-
-        ExecutorService executorService = ThreadPoolUtil.getThreadPool();
-
-        executorService.execute(() -> {
-            List<String> dataList = crawlerMapper.selectAllCity();
-            System.out.println("size:" + dataList.size());
-            if (!dataList.isEmpty()) {
-                for (String city : dataList) {
-                    ZqDataCrawler.zqDataCaptureMethod(city);
-                }
-            }
-        });
-
-        return ResultBody.success();
-    }
 
 
     /**
      * 基于博客园用户相关的文章抓取
      */
     @PostMapping("/cnblog_user")
+    @LcnTransaction
+    @Transactional
     @ApiOperation("基于博客园用户相关的文章抓取")
-    public ResultBody cnblog_user() {
+    public RespBody cnblog_user() {
         try {
             ExecutorService executorService = ThreadPoolUtil.getThreadPool();
 
@@ -87,14 +64,14 @@ public class CrawlerController {
                 cnBlogsApi.getToken();
                 List<String> dataList = postCrawlerMapper.selectAllUserName(8L);
                 for (String str : dataList) {
-                    ResultBody resultBody01 = cnBlogsApi.getPersonalBlogInfo(str);
-                    if (ResultCode.SELECT_SUCCESS.getCode().equals(resultBody01.getCode())) {
+                    RespBody resultBody01 = cnBlogsApi.getPersonalBlogInfo(str);
+                    if (RespCode.SELECT_SUCCESS.getCode().equals(resultBody01.getCode())) {
                         JSONObject jsonObject = new JSONObject(resultBody01.getData());
                         int totalCount = Integer.parseInt(jsonObject.get("postCount").toString());
                         int pageSize = 10;
                         int computer = totalCount / pageSize;
                         for (int i = 0; i < computer; i++) {
-                            ResultBody resultBody02 = cnBlogsApi.getPersonalBlogPostList(str, i);
+                            RespBody resultBody02 = cnBlogsApi.getPersonalBlogPostList(str, i);
                             JSONArray jsonArray = new JSONArray(resultBody02.getData());
                             List<PostCrawlerReqDTO> postCrawlerReqDTOList = handleDataDetail(jsonArray);
                             if (!postCrawlerReqDTOList.isEmpty()) {
@@ -109,15 +86,17 @@ public class CrawlerController {
             e.printStackTrace();
         }
 
-        return ResultBody.success();
+        return RespBody.success();
     }
 
     /**
      * 博客园首页文章抓取
      */
     @PostMapping("/cnblogs_home")
+    @LcnTransaction
+    @Transactional
     @ApiOperation("博客园首页文章抓取")
-    public ResultBody cnblogs_home() {
+    public RespBody cnblogs_home() {
         ExecutorService executorService = ThreadPoolUtil.getThreadPool();
         executorService.execute(() -> {
             int totalCount = 200;
@@ -125,7 +104,7 @@ public class CrawlerController {
             cnBlogsApi.getToken();
             //具体数据抓取
             for (int i = 1; i < totalCount; i++) {
-                ResultBody resultBody = cnBlogsApi.getSiteHomePostList(String.valueOf(i), String.valueOf("10"));
+                RespBody resultBody = cnBlogsApi.getSiteHomePostList(String.valueOf(i), String.valueOf("10"));
                 Console.log("数据入库");
                 JSONArray jsonArray = new JSONArray(resultBody.getData());
                 List<PostCrawlerReqDTO> postCrawlerReqDTOList = handleDataDetail(jsonArray);
@@ -135,7 +114,7 @@ public class CrawlerController {
             }
         });
 
-        return ResultBody.success();
+        return RespBody.success();
     }
 
 
@@ -143,8 +122,10 @@ public class CrawlerController {
      * 博客园精品文章抓取
      */
     @PostMapping("/cnblog_es")
+    @LcnTransaction
+    @Transactional
     @ApiOperation("博客园精品文章抓取")
-    public ResultBody cnblog_es() {
+    public RespBody cnblog_es() {
         ExecutorService executorService = ThreadPoolUtil.getThreadPool();
         executorService.execute(() -> {
             int totalCount = 160;
@@ -152,7 +133,7 @@ public class CrawlerController {
             cnBlogsApi.getToken();
             //具体数据抓取
             for (int i = 1; i < totalCount; i++) {
-                ResultBody resultBody = cnBlogsApi.getEssenceAreaPostList(String.valueOf(i), String.valueOf("10"));
+                RespBody resultBody = cnBlogsApi.getEssenceAreaPostList(String.valueOf(i), String.valueOf("10"));
                 Console.log("数据入库");
                 JSONArray jsonArray = new JSONArray(resultBody.getData());
                 List<PostCrawlerReqDTO> postCrawlerReqDTOList = handleDataDetail(jsonArray);
@@ -161,7 +142,7 @@ public class CrawlerController {
                 }
             }
         });
-        return ResultBody.success();
+        return RespBody.success();
     }
 
     /**

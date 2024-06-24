@@ -16,7 +16,6 @@
         <module>yc-common-redis</module>
         <module>yc-common-security</module>
         <module>yc-common-knife4j</module>
-        <module>yc-common-mongodb</module>
         <module>yc-common-elasticsearch</module>
         <module>yc-common-rabbitmq</module>
         <module>yc-common-log</module>
@@ -41,6 +40,30 @@
         <module>yc-common-mp</module>
         <module>yc-common-pay</module>
         <module>yc-common-logstash</module>
+        <module>yc-common-nacos</module>
+        <module>yc-common-sentinel</module>
+        <module>yc-common-eureka</module>
+        <module>yc-common-dubbo</module>
+        <module>yc-common-cxf</module>
+        <module>yc-common-grpc</module>
+        <module>yc-common-shardingjdbc</module>
+        <module>yc-common-shedlock</module>
+        <module>yc-common-easypoi</module>
+        <module>yc-common-tlpoi</module>
+        <module>yc-common-liteflow</module>
+        <module>yc-common-smart-socket</module>
+        <module>yc-common-image-combiner</module>
+        <module>yc-common-easyes</module>
+        <module>yc-common-dynamic-tp</module>
+        <module>yc-common-gobrs-async</module>
+        <module>yc-common-easypdf</module>
+        <module>yc-common-influxdb</module>
+        <module>yc-common-clickhouse</module>
+        <module>yc-common-sqlserver</module>
+        <module>yc-common-postgresql</module>
+        <module>yc-common-neo4j</module>
+        <module>yc-common-dmjdbc</module>
+        <module>yc-common-websocket</module>
     </modules>
 
 
